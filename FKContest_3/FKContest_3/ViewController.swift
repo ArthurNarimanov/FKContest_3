@@ -35,13 +35,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         view.addSubview(box)
         view.addSubview(slider)
-        view.layoutMargins = Constants.layoutMargins
         
-        box.frame = CGRect(x: view.layoutMargins.left, y: 100, width: 100, height: 100)
-        slider.frame = CGRect(x: view.layoutMargins.left,
-                              y: box.frame.maxY + 50,
-                              width: view.bounds.width - view.layoutMargins.right - view.layoutMargins.left,
-                              height: 30)
         slider.addTarget(self, action: #selector(self.sliderValueDidChange(_:)), for: .valueChanged)
         slider.addTarget(self, action: #selector(self.sliderTouchUpInside(_:)), for: .touchUpInside)
         slider.addTarget(self, action: #selector(self.sliderTouchDown(_:)), for: .touchDown)
@@ -52,6 +46,17 @@ class ViewController: UIViewController {
                                           height: self.box.bounds.size.height * 1.5)
             self.box.frame.origin.x = self.slider.frame.maxX - self.box.frame.width
         }
+    }
+    
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        
+        guard slider.value == 0 else { return }
+        box.frame = CGRect(x: view.layoutMargins.left, y: 100, width: 100, height: 100)
+        slider.frame = CGRect(x: view.layoutMargins.left,
+                              y: box.frame.maxY + 50,
+                              width: view.bounds.width - view.layoutMargins.right - view.layoutMargins.left,
+                              height: 30)
     }
     
     @objc
@@ -74,6 +79,5 @@ class ViewController: UIViewController {
     
     enum Constants {
         static let duration: CGFloat = 0.3
-        static let layoutMargins = UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 12)
     }
 }
